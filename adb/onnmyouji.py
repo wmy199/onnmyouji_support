@@ -18,7 +18,10 @@ import re
 start = settings.start
 end_victory = settings.end_victory
 end_defeat = settings.end_defeat
+<<<<<<< HEAD
 already = settings.already
+=======
+>>>>>>> ae1fb69f2376cc3155dbaa3f3afa054134204b97
 
 mx,my = 0,0
 start_time = time.time()
@@ -79,6 +82,7 @@ def yuhun():
 		check.click(rx,ry)
 		check.get_randomtime(0.5,1)
 
+<<<<<<< HEAD
 
 story_skip =settings.story_skip
 story_battle = settings.story_battle
@@ -124,17 +128,27 @@ def story():
 
 def get_choice():
 	choice = input('请输入数字来选择:\n1 御魂,御灵,业原火;\n2 剧情;\n3 还在做，先等一下;\n')
+=======
+	
+
+def get_choice():
+	choice = input('请输入数字来选择:\n1 御魂,御灵,业原火;\n2 还在做，先等一下;\n')
+>>>>>>> ae1fb69f2376cc3155dbaa3f3afa054134204b97
 	if not choice.isdigit() is True:
 		print('只能输入数字')
 		get_choice(choice)
 	else:
+<<<<<<< HEAD
 		print('任务开始')
+=======
+>>>>>>> ae1fb69f2376cc3155dbaa3f3afa054134204b97
 		return choice
 		
 state = ''
 choice = get_choice()
 if choice == '1':
 	state = 'yuhun'	
+<<<<<<< HEAD
 if choice == '2':
 	state = 'story'
 while True:
@@ -142,6 +156,11 @@ while True:
 		yuhun()
 	if state == 'story':
 		story()
+=======
+while True:
+	if state == 'yuhun':
+		yuhun()
+>>>>>>> ae1fb69f2376cc3155dbaa3f3afa054134204b97
 
 print('刷完了')
 
