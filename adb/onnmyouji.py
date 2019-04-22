@@ -18,10 +18,7 @@ import re
 start = settings.start
 end_victory = settings.end_victory
 end_defeat = settings.end_defeat
-<<<<<<< HEAD
 already = settings.already
-=======
->>>>>>> ae1fb69f2376cc3155dbaa3f3afa054134204b97
 
 mx,my = 0,0
 start_time = time.time()
@@ -82,13 +79,14 @@ def yuhun():
 		check.click(rx,ry)
 		check.get_randomtime(0.5,1)
 
-<<<<<<< HEAD
 
 story_skip =settings.story_skip
 story_battle = settings.story_battle
 story_conversation = settings.story_conversation
 story_conversation_1 = settings.story_conversation_1
 story_eye = settings.story_eye
+story_animation_skip = settings.story_animation_skip
+story_animation_close = settings.story_animation_close
 
 def check_and_click(img,template):
 	x,y,res = check.match(img,template)
@@ -123,44 +121,54 @@ def story():
 	res = check_and_click(img,story_eye)
 	if res:
 		return
-	
+	res = check_and_click(img,story_animation_skip)
+	if res:
+		return
+	res = check_and_click(img,story_animation_close)
+	if res:
+		return
+
+#wakajimaibendou
+wakajimachousen = settings.wakajimachousen
+def wakajimaibendo():
+	img = check.get_screen()
+	res = check_and_click(img,wakajimachousen)
+	if res:
+		return
+	res = check_and_click(img,already)
+	if res:
+		return
+	res = check_and_click(img,end_victory)
+	if res:
+		return
+	res = check_and_click(img,end_defeat)
+	if res:
+		return
 
 
 def get_choice():
-	choice = input('请输入数字来选择:\n1 御魂,御灵,业原火;\n2 剧情;\n3 还在做，先等一下;\n')
-=======
-	
-
-def get_choice():
-	choice = input('请输入数字来选择:\n1 御魂,御灵,业原火;\n2 还在做，先等一下;\n')
->>>>>>> ae1fb69f2376cc3155dbaa3f3afa054134204b97
+	choice = input('请输入数字来选择:\n1 御魂,御灵,业原火;\n2 剧情;\n3 离岛活动;\n4还在做，先等一下;\n')
 	if not choice.isdigit() is True:
 		print('只能输入数字')
 		get_choice(choice)
 	else:
-<<<<<<< HEAD
 		print('任务开始')
-=======
->>>>>>> ae1fb69f2376cc3155dbaa3f3afa054134204b97
 		return choice
-		
 state = ''
 choice = get_choice()
 if choice == '1':
 	state = 'yuhun'	
-<<<<<<< HEAD
 if choice == '2':
 	state = 'story'
+if choice == '3':
+	state = 'ibendo'
 while True:
 	if state == 'yuhun':
 		yuhun()
 	if state == 'story':
 		story()
-=======
-while True:
-	if state == 'yuhun':
-		yuhun()
->>>>>>> ae1fb69f2376cc3155dbaa3f3afa054134204b97
+	if state == 'ibendo':
+		wakajimaibendo()
 
 print('刷完了')
 

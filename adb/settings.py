@@ -11,9 +11,26 @@ def imgload(path,resize_Magnification):
 
 adb_connect = 'adb connect 127.0.0.1:5555'
 os.system(adb_connect)
-device = ''
-<<<<<<< HEAD
 
+os.system('adb devices > devices.txt')
+with open('devices.txt','r') as f:
+   devices = f.read()
+container = []
+numitem = re.findall(r'[a-z]*-\d*',devices)
+stritem = re.findall(r'\d*\.\d*\.\d*\.\d*:\d*',devices)
+devices = numitem+stritem
+dct = 1
+s= ''
+for each in devices:
+   s+=('\n'+str(dct)+' '+each)
+   dct+=1
+
+print('请选择设备：')
+device = input('%s\n' % s)
+if device.isdigit():
+   device = int(device)
+device = devices[device-1]
+print('已连接%s' % device)
 start = 'img/start.png'
 end_victory = 'img/end_victory.png'
 end_defeat = 'img/end_defeat.png'
@@ -25,18 +42,16 @@ story_battle = 'img/battle.png'
 story_conversation = 'img/conversation.png'
 story_conversation_1 = 'img/conversation_1.png'
 story_eye = 'img/eye.png'
+story_animation_skip = 'img/animation_skip.png'
+story_animation_close = 'img/animation_close.png'
 
+#离岛活动
+wakajimachousen = 'img/wakajimaibendo/wakajimachousen.png'
 
-
-=======
-start = 'img/start.png'
-end_victory = 'img/end_victory.png'
-end_defeat = 'img/end_defeat.png'
->>>>>>> ae1fb69f2376cc3155dbaa3f3afa054134204b97
 
 
 origin =[1440,810]
-os.system('adb %s shell wm size > 1.txt' % device)
+os.system('adb -s %s shell wm size > 1.txt' % device)
 with open('1.txt','r') as f:
    window_info_str = f.read()
 wis = re.findall(r'\d*x\d*',window_info_str)
@@ -45,11 +60,11 @@ window_info = re.findall(r'\d+',wis[0])
 window_width = int(window_info[0])
 window_height = int(window_info[1])
 resize_Magnification = window_width/origin[0]
+print('当前设备分辨率:')
 print(window_width,window_height)
 
 start = imgload(start,resize_Magnification)
 end_victory = imgload(end_victory,resize_Magnification)
-<<<<<<< HEAD
 end_defeat = imgload(end_defeat,resize_Magnification)
 
 already = imgload(already,resize_Magnification)
@@ -58,6 +73,8 @@ story_conversation = imgload(story_conversation,resize_Magnification)
 story_conversation_1 = imgload(story_conversation_1,resize_Magnification)
 story_skip = imgload(story_skip,resize_Magnification)
 story_eye = imgload(story_eye,resize_Magnification)
-=======
-end_defeat = imgload(end_defeat,resize_Magnification)
->>>>>>> ae1fb69f2376cc3155dbaa3f3afa054134204b97
+story_animation_skip = imgload(story_animation_skip,resize_Magnification)
+story_animation_close = imgload(story_animation_close,resize_Magnification)
+
+
+wakajimachousen = imgload(wakajimachousen,resize_Magnification)

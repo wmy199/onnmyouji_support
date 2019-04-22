@@ -8,18 +8,22 @@ import settings
 def get_screen():
 	# cmd_get = 'adb shell screencap -p /sdcard/screen_img.png'
 	# cmd_send = 'adb pull sdcard/screen_img.png img/test.png'
-	cmd_send = 'adb %s shell screencap -p > img/test.png' % settings.device
+	imgpath = 'img/'+settings.device+'/screen.png'
+	path = 'img/'+settings.device
+	if not os.path.exists(path):
+		os.makedirs(path)
+	cmd_send = 'adb -s %s shell screencap -p > %s' % (settings.device,imgpath)
 	
 	# os.system(cmd_get)
 	os.system(cmd_send)
-	with open('img/test.png','rb') as f:
+	with open(imgpath,'rb') as f:
 		img = f.read()
 		img = img.replace(b'\r\n',b'\n').replace(b'\r\n',b'\n')
 	
-	with open('img/test.png','wb+') as f:
+	with open(imgpath,'wb+') as f:
 		f.write(img)
-	img = cv2.imread('img/test.png',0)
-	os.system('del img\\test.png')
+	img = cv2.imread(imgpath,0)
+	#os.system('del %s' % imgpath)
 	return img
 
 
@@ -46,6 +50,6 @@ def get_randomtime(a, b):
 
 def click(x, y):
     """输入两个二维列表，表示要点击的位置的x坐标，y坐标"""
-    cmd_click = 'adb %s shell input tap {} {}'.format(x, y) % settings.device
+    cmd_click = 'adb -s %s shell input tap {} {}'.format(x, y) % settings.device
     #print('%s,%s' % (x,y))
     os.system(cmd_click)
