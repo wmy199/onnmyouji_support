@@ -33,6 +33,7 @@ device = devices[device-1]
 print('已连接%s' % device)
 start = 'img/start.png'
 end_victory = 'img/end_victory.png'
+end = 'img/end.png'
 end_defeat = 'img/end_defeat.png'
 already = 'img/already.png'
 #剧情图片模板
@@ -66,6 +67,8 @@ print(window_width,window_height)
 start = imgload(start,resize_Magnification)
 end_victory = imgload(end_victory,resize_Magnification)
 end_defeat = imgload(end_defeat,resize_Magnification)
+end = imgload(end,resize_Magnification)
+yes = imgload('img/yes.png',resize_Magnification)
 
 already = imgload(already,resize_Magnification)
 story_battle = imgload(story_battle,resize_Magnification)
@@ -76,5 +79,20 @@ story_eye = imgload(story_eye,resize_Magnification)
 story_animation_skip = imgload(story_animation_skip,resize_Magnification)
 story_animation_close = imgload(story_animation_close,resize_Magnification)
 
-
+#team
 wakajimachousen = imgload(wakajimachousen,resize_Magnification)
+team_start = imgload('img/team_start.png',resize_Magnification)
+team_two = imgload('img/team_two.png',resize_Magnification)
+team_three = imgload('img/team_three.png',resize_Magnification)
+
+#pvp
+pvp = imgload('img/pvp.png',resize_Magnification)
+auto = imgload('img/auto.png',resize_Magnification)
+event_wsjl = imgload('eventimg/wsjl.png',resize_Magnification)
+
+#kekkai
+kekkai_flush = imgload('img/flush.png',resize_Magnification)
+kekkai_target = imgload('img/kekkai-target.png',resize_Magnification)
+kekkai_click = imgload('img/kekkai-click.png',resize_Magnification)
+kekkai_0_6 = imgload('img/kekkai-0-6.png',resize_Magnification)
+kekkai_0_30 = imgload('img/kekkai-0-30.png',resize_Magnification)
