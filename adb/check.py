@@ -3,7 +3,13 @@ import cv2
 import random
 import time
 import settings
-
+import threading
+# def sendandpull(imgpath):
+# 	cmd_send = 'adb -s %s shell screencap -p sdcard/screen.png' % settings.device
+# 	cmd_pull = 'adb -s %s pull sdcard/screen.png %s' % (settings.device,imgpath)
+# 	os.system(cmd_send)
+# 	os.system(cmd_pull)
+# 	print('done')
 
 def get_screen():
 	# cmd_get = 'adb shell screencap -p /sdcard/screen_img.png'
@@ -12,18 +18,32 @@ def get_screen():
 	path = 'img/'+settings.device
 	if not os.path.exists(path):
 		os.makedirs(path)
-	cmd_send = 'adb -s %s shell screencap -p > %s' % (settings.device,imgpath)
-	
-	# os.system(cmd_get)
+	cmd_send = "adb -s %s shell screencap -p > %s " % (settings.device,imgpath)
+	#cmd_send = 'adb -s %s shell screencap -p sdcard/screen.png' % settings.device
+	#cmd_pull = 'adb -s %s pull sdcard/screen.png %s' % (settings.device,imgpath)
+	#os.system(cmd_get)
 	os.system(cmd_send)
-	with open(imgpath,'rb') as f:
+	#a = os.system(cmd_pull)
+	# t = threading.Thread(target=sendandpull,args=(imgpath,))
+	# t.start()
+	# t.join()
+	with open(imgpath,'ab+') as f:
+		f.seek(0)
 		img = f.read()
-		img = img.replace(b'\r\n',b'\n').replace(b'\r\n',b'\n')
-	
-	with open(imgpath,'wb+') as f:
+		img = img.replace(b'\r\r\n',b'\n')
+		f.truncate(0)
 		f.write(img)
+
+	
+	#time.sleep(1)
+	# try:
+	# 	with open(imgpath,'wb+') as f:
+	# 		f.write(img)
+	# except OSError as e:
+	# 	with open(imgpath,'wb+') as f:
+	# 		f.write(img)
 	img = cv2.imread(imgpath,0)
-	#os.system('del %s' % imgpath)
+	#os.system('del %s' % imgpath.replace('/','\\'))
 	return img
 
 

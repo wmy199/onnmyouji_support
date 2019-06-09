@@ -88,7 +88,6 @@ team_three = imgload('img/team_three.png',resize_Magnification)
 #pvp
 pvp = imgload('img/pvp.png',resize_Magnification)
 auto = imgload('img/auto.png',resize_Magnification)
-event_wsjl = imgload('eventimg/wsjl.png',resize_Magnification)
 
 #kekkai
 kekkai_flush = imgload('img/flush.png',resize_Magnification)

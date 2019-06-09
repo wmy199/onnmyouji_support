@@ -89,9 +89,10 @@ story_eye = settings.story_eye
 story_animation_skip = settings.story_animation_skip
 story_animation_close = settings.story_animation_close
 
+scale = 0.9
 def check_and_click(img,template):
 	x,y,res = check.match(img,template)
-	if res >0.8:
+	if res > scale:
 		x,y = check.get_randomxy(x,y)
 		check.click(x,y)
 		check.get_randomtime(0.5,1)
@@ -205,7 +206,12 @@ def quick_create(*imgs):
 def pvp(img):
 	return
 
-@quick_create(settings.event_wsjl,settings.already,settings.end)
+@quick_create(settings.imgload('eventimg/tj.png',settings.resize_Magnification)
+	,settings.imgload('eventimg/ji.png',settings.resize_Magnification)
+	,settings.team_start
+	,settings.already
+	,settings.end
+	)
 def test(img):
 	return
 
@@ -214,17 +220,105 @@ def kekkai(img):
 	arr = (settings.kekkai_0_6,settings.kekkai_0_30)
 	for each in arr:
 		x,y,res = check.match(img, each)
-		if res >0.96:
+		print(res)
+		if res >0.98:
 			return True
 	for each in (settings.kekkai_click,settings.kekkai_target):
 		x,y,res = check.match(img, each)
 		print(res)
-		if res >0.945:
+		if res >0.94:
 			x,y=check.get_randomxy(x,y)
 			check.click(x,y)
 			check.get_randomtime(0.5,1)		
 			return True
 	return	False
+class GameSupport(object):
+	"""docstring for GameSupport"""
+	def __init__(self, *relavtice_img,**absolute_img):
+		self.relavtice_img = []
+		self.absolute_img = []
+		for each in relavtice_img:
+			self.relavtice_img.append(cv2.imread(each,0))
+		for name,v in absolute_img:
+			self.absolute_img.append(cv2.imread(v,0))
+
+	def get_screen():
+		imgpath = 'img/'+settings.device+'/screen.png'
+		path = 'img/'+settings.device
+		if not os.path.exists(path):
+			os.makedirs(path)
+		cmd_send = "adb -s %s shell screencap -p > %s " % (settings.device,imgpath)
+		os.system(cmd_send)
+		with open(imgpath,'ab+') as f:
+			f.seek(0)
+			img = f.read()
+			img = img.replace(b'\r\r\n',b'\n')
+			f.truncate(0)
+			f.write(img)
+		img = cv2.imread(imgpath,0)
+		return img
+
+	def match(img, template):
+		res = cv2.matchTemplate(img, template, cv2.TM_CCOEFF_NORMED)
+		h,w =template.shape[:2]
+		min_val,max_val,min_loc,max_loc = cv2.minMaxLoc(res)
+		left_top = max_loc
+		right_bottom = (max_loc[0]+w,max_loc[1]+h)
+		return left_top,right_bottom,res.max()
+
+
+	def get_randomxy(x, y):
+		
+		xc = random.randint(int(x[0]), int(y[0]))
+		yc = random.randint(int(x[1]), int(y[1]))
+		return xc,yc
+
+	def get_randomtime(a, b):
+	    """产生a,b间的随机时间延迟"""
+	    time.sleep(random.uniform(a, b))
+
+
+	def click(x, y):
+	    """输入两个二维列表，表示要点击的位置的x坐标，y坐标"""
+	    cmd_click = 'adb -s %s shell input tap {} {}'.format(x, y) % settings.device
+	    #print('%s,%s' % (x,y))
+	    os.system(cmd_click)
+
+	scale = 0.9
+	def check_and_click(img,template):
+		x,y,res = match(img,template)
+		if res > self.scale:
+			x,y = get_randomxy(x,y)
+			click(x,y)
+			get_randomtime(0.5,1)
+			return True
+		return False
+
+	def update(self):
+		img = get_screen()
+		pos = []
+		count = 0
+		for name,val in self.absolute_img.items():
+			lt,rb,res = match(img, val)
+			if res>0.9:
+				count+=1
+			x = lt[0]+rb[0]
+			y = lt[1]+rb[1]
+			pos.append((x/2,y/2))
+		position = [0,0]
+		for each in pos:
+			position[0]+=each[0]
+			position[1]+=each[1]
+		position[0] = position[0]/position.count
+		position[1] = position[1]/position.count
+		if count==absolute_img.items.count():
+			click(position[0], position[1])
+		
+		for each in self.relavtice_img:
+			res = check_and_click(img, each)
+			if res:
+				return
+
 
 def get_choice():
 	choice = input('请输入数字来选择:\n1 御魂,御灵,业原火;\n2 剧情;\n3 离岛活动;\n4组队;\n5斗技;\n6结界突破;\n7还在做，先等一下;\n999测试\n')
@@ -248,27 +342,33 @@ elif choice == '4':
 elif choice == '5':
 	state = 'pvp'
 elif choice == '6':
+	scale = 0.8
 	state = 'kekkai'
 elif choice == '999':
 	state = 'test'
+elif choice == '0':
+	check.get_screen()
 else:
 	print('不存在的')
 while True:
-	if state == 'yuhun':
-		yuhun()
-	elif state == 'story':
-		story()
-	elif state == 'ibendo':
-		wakajimaibendo()
-	elif state == 'team':
-		teamwork()
-	elif state == 'pvp':
-		pvp()
-		print(pvp.__name__)
-	elif state == 'kekkai':
-		kekkai()
-	elif state == 'test':
-		test()
+	try:
+		if state == 'yuhun':
+			yuhun()
+		elif state == 'story':
+			story()
+		elif state == 'ibendo':
+			wakajimaibendo()
+		elif state == 'team':
+			teamwork()
+		elif state == 'pvp':
+			pvp()
+			print(pvp.__name__)
+		elif state == 'kekkai':
+			kekkai()
+		elif state == 'test':
+			test()
+	except Exception as exc:
+		pass
 
 print('done')
 
